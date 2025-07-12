@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class helps us read employee and attendance records from text files.
+ * This class helps us read employee and attendance records from csv files.
  * We use it to load data into our program for processing.
  */
 public class FileHandler {
 
     /**
-     * Reads attendance records for a specific employee from a text file.
+     * Reads attendance records for a specific employee from a csv file.
      * This method scans each line and checks if the employee ID matches.
      * 
      * @param filePath Path to the attendance data file
@@ -24,7 +24,7 @@ public class FileHandler {
         List<TimeKeeping> records = new ArrayList<>(); // List to store valid records
         
         // Open file and start reading line by line
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("attendance.csv"))) {
             String line; // Stores each line from the file
             while ((line = reader.readLine()) != null) {
                 System.out.println("Reading line: " + line); // Debugging output

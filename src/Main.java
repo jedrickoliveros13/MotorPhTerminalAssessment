@@ -167,6 +167,7 @@ class EmployeeListFrame extends JFrame {
         deleteButton.addActionListener(e -> deleteSelectedEmployee());
     }
 
+    
     /**
      * Loads employee data from the CSV file into the table.
      */
@@ -183,7 +184,7 @@ class EmployeeListFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "Error loading employee data.");
         }
     }
-
+    
     /**
      * Opens a detail view for the selected employee.
      */
@@ -300,7 +301,7 @@ class EmployeeDetailFrame extends JFrame {
             detailArea.setText("Error loading employee data.");
         }
     }
-
+    
     /**
      * Computes salary (currently static) and displays it.
      */

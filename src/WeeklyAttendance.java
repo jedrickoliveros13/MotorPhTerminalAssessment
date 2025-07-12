@@ -21,6 +21,7 @@ public class WeeklyAttendance {
      * Constructor for weekly attendance
      * Simple initialization - created for modularity and reusability
      */
+    
     public WeeklyAttendance(String employeeId, String weekStartDate) {
         this.employeeId = employeeId;
         this.weekStartDate = weekStartDate;
@@ -43,7 +44,7 @@ public class WeeklyAttendance {
             System.out.println("Error: Employee ID mismatch.");
         }
     }
-    
+
     /**
      * Get count of daily attendance records
      * Added this method to help with validation and testing
