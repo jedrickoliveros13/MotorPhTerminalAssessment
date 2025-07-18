@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import com.opencsv.CSVReader;
+import java.io.FileReader;
+import java.util.List;
+import java.util.Arrays;
 
 /**
  * Main class to launch the application.
@@ -120,7 +124,7 @@ class MainGUI extends JFrame {
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             PrintWriter writer = new PrintWriter(new FileWriter(csvFile))
         ) {
-            writer.println("Employee ID,Last Name,First Name,SSS No,PhilHealth No,TIN,Pag-IBIG No");
+            writer.println("Employee ID, Last Name, First Name, Birthday, Address, Phone No, SSS No, PhilHealth No, TIN, Pag-IBIG No, Status, Position, Immediate Supervisor, Basic Salary, Rice Subsidy, Phone Allowance, Clothing Allowance, Gross Semi-monthly Rate, Hourly Rate");
             String line;
             while ((line = reader.readLine()) != null) {
                 writer.println(line);
@@ -145,7 +149,7 @@ class EmployeeListFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        String[] columns = {"Employee ID", "Last Name", "First Name", "SSS No", "PhilHealth No", "TIN", "Pag-IBIG No"};
+        String[] columns = {"Employee ID", "Last Name", "First Name", "Birthday", "Address", "Phone No", "SSS No", "PhilHealth No", "TIN", "Pag-IBIG No", "Status", "Position", "Immediate Supervisor", "Basic Salary", "Rice Subsidy", "Phone Allowance", "Clothing Allowance", "Gross Semi-monthly Rate", "Hourly Rate"};
         tableModel = new DefaultTableModel(columns, 0);
         employeeTable = new JTable(tableModel);
         loadEmployeeData();
@@ -171,20 +175,19 @@ class EmployeeListFrame extends JFrame {
     /**
      * Loads employee data from the CSV file into the table.
      */
-    private void loadEmployeeData() {
-        tableModel.setRowCount(0);
-        try (Scanner scanner = new Scanner(new File("employees.csv"))) {
-            while (scanner.hasNextLine()) {
-                String[] parts = scanner.nextLine().split(",");
-                if (parts.length >= 7) {
-                    tableModel.addRow(Arrays.copyOfRange(parts, 0, 7));
-                }
+   private void loadEmployeeData() {
+    tableModel.setRowCount(0);
+    try (CSVReader reader = new CSVReader(new FileReader("employees.csv"))) {
+        List<String[]> allRows = reader.readAll();
+        for (String[] row : allRows) {
+            if (row.length >= 19) {
+                tableModel.addRow(Arrays.copyOfRange(row, 0, 19));
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error loading employee data.");
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error loading employee data: " + e.getMessage());
     }
-    
+}
     /**
      * Opens a detail view for the selected employee.
      */
