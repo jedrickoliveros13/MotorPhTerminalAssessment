@@ -76,7 +76,7 @@ class MainGUI extends JFrame {
      * Verifies credentials against a local file.
      */
     private boolean authenticateUser(String username, String password) {
-        File file = new File("login_credentials.txt");
+        File file = new File("login_credentials.csv");
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String[] parts = scanner.nextLine().split(",");
@@ -322,27 +322,47 @@ class EmployeeDetailFrame extends JFrame {
  * UI form for adding a new employee.
  */
 class NewEmployeeFrame extends JFrame {
-    private JTextField[] fields = new JTextField[7];
+    private JTextField[] fields = new JTextField[19];
     private EmployeeListFrame parent;
 
     public NewEmployeeFrame(EmployeeListFrame parent) {
         this.parent = parent;
         setTitle("Add New Employee");
-        setSize(400, 300);
+        setSize(600, 600);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(8, 2));
+        setLayout(new BorderLayout());
 
-        String[] labels = {"Employee ID", "Last Name", "First Name", "SSS No", "PhilHealth No", "TIN", "Pag-IBIG No"};
+        String[] labels = {
+            "Employee ID", "Last Name", "First Name", "Birthday", "Address", "Phone No", "SSS No",
+            "PhilHealth No", "TIN", "Pag-IBIG No", "Status", "Position", "Immediate Supervisor",
+            "Basic Salary", "Rice Subsidy", "Phone Allowance", "Clothing Allowance",
+            "Gross Semi-monthly Rate", "Hourly Rate"
+        };
+
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+
         for (int i = 0; i < labels.length; i++) {
-            add(new JLabel(labels[i]));
-            fields[i] = new JTextField();
-            add(fields[i]);
+            fields[i] = new JTextField(20);
+
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            formPanel.add(new JLabel(labels[i] + ":"), gbc);
+
+            gbc.gridx = 1;
+            formPanel.add(fields[i], gbc);
         }
 
         JButton submit = new JButton("Submit");
         submit.addActionListener(e -> addEmployee());
-        add(new JLabel());
-        add(submit);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(submit);
+
+        add(new JScrollPane(formPanel), BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     /**
@@ -362,11 +382,11 @@ class NewEmployeeFrame extends JFrame {
 
         try (FileWriter fw = new FileWriter("employees.csv", true)) {
             fw.write(sb.toString() + "\n");
-            JOptionPane.showMessageDialog(this, "Employee added.");
+            JOptionPane.showMessageDialog(this, "Employee added successfully.");
             parent.refreshTable();
-            dispose(); // Close the add employee window
+            dispose();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving data.");
+            JOptionPane.showMessageDialog(this, "Error saving employee data.");
         }
     }
 }
